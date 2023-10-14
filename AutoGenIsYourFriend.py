@@ -6,6 +6,14 @@ Full documentation and many more samples can be found at the Autogen GitHub page
 In this initial document, we will take their first example in the documentation and break it down to show how it all works. In other files,
 we will show how to use this framework to create a more complex team of agents to help with various tasks.
 
+*** Initial Setup ***
+It is strongly recommended (but not required) that you create a virtual environment for this project. This will keep your dependencies separate from other projects and make it easier to manage. I use Anaconda for this purpose, but you can use whatever you are comfortable with. For data scientists, Anaconda is a great choice. You can download it here: https://www.anaconda.com/products/individual
+
+After you install it just create a new environment and activate it. For example, I created an environment called autogen and activated from the Anaconda Prompt with the following commands:
+conda create -n autogen python
+conda activate autogen
+
+
 *** Install Autogen ***
 Before you can do anything you need to make sure to have autogen intstalled for python. You can do this by running the following command in your terminal:
 pip install pyautogen
@@ -29,6 +37,11 @@ OAI_CONFIG_LIST
 
 OPENAI_API_KEY
 <same api key used in OAI_CONFIG_LIST>
+
+*** Running the Code ***
+To run any of the files from the command line, just type python <filename>.py. For example, python AutoGenIsYourFriend.py
+
+NOTE: If you created your environment variables after you opened your terminal (which is usually the case), you will need to close and reopen your terminal for the environment variables to be available to the python interpreter.
 
 """
 # import the autogen library elements we need
