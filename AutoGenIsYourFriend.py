@@ -58,7 +58,8 @@ reference them later. We also pass in the config_list we created earlier. This i
 assistant = AssistantAgent("assistant", llm_config={"config_list": config_list})
 
 """
-Next we create the user proxy. We create an instance of the UserProxyAgent class and give it a name. You can only have one user proxy agent. Its job, in this example, is to run code and interact with the user. Notice we also pass in the config_list we created earlier. This is how the user proxy knows how to connect to the OpenAI API. However, we add one more parameter, code_execution_config. This is how we tell the user proxy where to run the code. In this example, we are telling it to run the code in the folder called 'coding' that it will create. This is where we will put any output we indicate.
+Next we create the user proxy. We create an instance of the UserProxyAgent class and give it a name. Just like AssistantAgents, you can have several user proxy agent. Its job, in this example, is to run code and interact with the user. Notice we also pass in the config_list we created earlier. This is how the user proxy knows how to connect to the OpenAI API. However, we add one more parameter, code_execution_config. Sometimes it may just run code without user interaction, for example. 
+This is also how we tell the user proxy where to run the code. In this example, we are telling it to run the code in the folder called 'coding' that it will create. This is where we will put any output we indicate.
 """
 user_proxy = UserProxyAgent("user_proxy", llm_config={"config_list": config_list}, code_execution_config={"work_dir": "coding"})
 

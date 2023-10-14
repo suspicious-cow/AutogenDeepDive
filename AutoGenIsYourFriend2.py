@@ -34,41 +34,26 @@ OPENAI_API_KEY
 # import the autogen library elements we need
 from autogen import AssistantAgent, UserProxyAgent, config_list_from_json
 
-
-""" 
-Ingest our config information from our OAI_CONFIG_LIST environment variable
-Technically, you can also set config_list directly as a list, for example, config_list = [{'model': 'gpt-4', 'api_key': '<your OpenAI API key here>'},]  
-But that would expose your API key in the code, which is not a good idea.
-
-At this point you are probably wondering why we had to create two environment variables when only one is referenced in the code.
-This is because the OPENAI_API_KEY is used by the autogen under the hood in various places and is required to be set or the code will not run. Give it a try to see what I mean. 
-"""
+# get our config information from our OAI_CONFIG_LIST environment variable
 config_list = config_list_from_json(env_or_file="OAI_CONFIG_LIST")
 
-
+"""
+Before we move on, take a minute to appreciate the fact that the code you ran previously is all you need to create a fully functional AI agent that can interact with a user.
+In just four lines of code you have a fully functional chat bot that can interact with a user and do just about anything you want. But wait! there's more!
+I'm not sure about you, but I want to do more than just chat with a bot. I want to be able to do things like plot a chart, or get the weather, or do anything without me if possible.
+Also, I'd like to have some artifacts afterward that I can use to share with others. This is where the power of Autogen really shines.
+Let's make those changes!
+"""
 
 """
-Now we create our agents. In this example, we are creating two agents, an assistant and a user proxy. This is the bare minimum to get started.
-The assistant is the agent that will be doing the planning and the user proxy is the agent that will be running code and interacting with the user.
-You can see a great graphic of how this will work here: https://github.com/microsoft/autogen/blob/main/website/static/img/chat_example.png
-
-We begin with the assistant. We create an instance of the AssistantAgent class and give it a name. You can have as many assistants as you want, but they must have unique names so you can 
-reference them later. We also pass in the config_list we created earlier. This is how the assistant knows how to connect to the OpenAI API.
+Now let's make a couple of changes: 
+First, let's modify the user proxy prompt to save the code and the plot image to our working folder. Since we don't want to interact, we will also tell the agent to not show the plot image.
+Second, we need to tell the user proxy that we don't want to interact with the user. Just do the work and save the artifacts. This is accomplished by adding two settings: max_consecutive_auto_reply to 0 and human_input_mode to NEVER. See the changes we made below. 
 """
+
 assistant = AssistantAgent("assistant", llm_config={"config_list": config_list})
 
-"""
-Next we create the user proxy. We create an instance of the UserProxyAgent class and give it a name. You can only have one user proxy agent. Its job, in this example, is to run code and interact with the user. Notice we also pass in the config_list we created earlier. This is how the user proxy knows how to connect to the OpenAI API. However, we add one more parameter, code_execution_config. This is how we tell the user proxy where to run the code. In this example, we are telling it to run the code in the folder called 'coding' that it will create. This is where we will put any output we indicate.
-"""
-user_proxy = UserProxyAgent("user_proxy", llm_config={"config_list": config_list}, code_execution_config={"work_dir": "coding"})
+user_proxy = UserProxyAgent("user_proxy", llm_config={"config_list": config_list}, code_execution_config={"work_dir": "coding"}, human_input_mode="NEVER")
 
-"""
-Finally, at the end of every autogen script, we need to call the initiate_chat function on the user proxy agent. This is what starts the conversation between all the agents and gets things rolling. Notice we pass in the list of assistants we created (in this case, only one) and we give it a message to start the conversation. This message is what the user proxy will use to start the conversation with the assistant. In this case, we are telling the assistant to plot a chart of the stock price change YTD for NVDA and TESLA.
-"""
-user_proxy.initiate_chat(assistant, message="Plot a chart of NVDA and TESLA stock price change YTD.")
+user_proxy.initiate_chat(assistant, message="Plot a chart of NVDA and TESLA stock price change YTD. Then save the code and the plot image to my working folder. Don't show me the plot image just save it.")
 
-"""
-Now run the code and see what happens. You will be prompted every step of the way to provide feedback, just press Enter to move on to the next step. The first thing you will see is the AssistantAgent suggesting a plan and the code to run for the plan. Then the UserProxyAgent will attempt to run the code but it won't work. The AssistantAgent is notified and it suggests a fix. The UserProxyAgent tries to run that code and this process continues until the code successfully runs. At one point it will show a graph of the stock prices that you can save if you desire. Close the graph. Type exit when done. When it is done,you should see a folder called 'coding' created in the same folder as this script that was used to create temporary files.
-
-When you are done here you can move on to the next tutorial, AutoGenIsYourFriend2.py, where we will show how to tweak this example to make it more useful.
-"""
