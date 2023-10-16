@@ -18,6 +18,10 @@ conda activate autogen
 Before you can do anything you need to make sure to have autogen intstalled for python. You can do this by running the following command in your terminal:
 pip install pyautogen
 
+*** Running the File ***
+When you are ready to run the file just type the following at the command prompt for your environment (or you can just run it from vscode):
+python AutoGenIsYourFriend.py
+
 *** Setting Environment Variables ***
 Before you can use Autogen, you need to set two system environment variables. I've included the formats and some guidance on just using the OpenAI API directly or through Azure OpenAI.
 See https://microsoft.github.io/autogen/docs/FAQ#set-your-api-endpoints
